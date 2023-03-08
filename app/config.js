@@ -37,7 +37,6 @@ module.exports = {
     { type: 'script', src: `main.js` },
     { type: 'stylesheet', src: `dracula.min.css` },
     { type: 'stylesheet', src: `main.css` },
-    { type: 'static', src: `cascadia-code-pl.woff2` },
     { type: 'static', src: `jm-photo-2023.jpg` },
   ]
 }
