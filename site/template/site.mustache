@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <title>John Mills</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <!-- <meta property="og:image" content="{{og_image}}" /> -->
+  <link rel="stylesheet" href="{{{base_url}}}/assets/site.css" />
+  <script src="{{{base_url}}}/assets/site.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="{{{base_url}}}/assets/jm-photo-2023.jpg" />
+      <!-- <a href="{{{base_url}}}/">Articles</a> -->
+    </header>
+    <nav>
+      <span>I mostly post minimal experiments, tips, and tricks. Keep up-to-date with me and subscribe to my <a href="{{{base_url}}}/johnmills.rss" target="_blank">RSS Feed</a></span>
+      <hr/>
+      {{#list}}<a href="{{link}}">{{title}}</a>{{/list}}
+    </nav>
+    <section>
+      {{#content}}
+        {{{content}}}
+        <aside>
+          <figure>
+            <img src="{{{base_url}}}/assets/jm-photo-2023.jpg" />
+          </figure>
+          <p>I'm John Mills, a professional frontend engineer. Here I share my experiences and journeys with all of you. Check out all my projects on <a href="https://github.com/iamjohnmills" target="_blank">Github</a>. Message or connect with me on <a href="https://www.linkedin.com/in/iamjohnmills" target="_blank">LinkedIn</a>. I'm a proud dad of my two daughters, cook sometimes, and am interested in a ton of weird stuff.</p>
+        </aside>
+      {{/content}}
+
+    </section>
+  </main>
+</body>
+</html>

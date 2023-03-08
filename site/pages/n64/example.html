@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      * { box-sizing: border-box; }
+      html,body { margin: 0; background: #000; overflow: hidden; height: 100%; }
+      #root { width: 100%; height: 100%; }
+      canvas { width: 100% !important; height: 100% !important; object-fit: cover; image-rendering: pixelated; }
+    </style>
+    <script src="three.0.87.1.min.js.gz"></script>
+    <script src="three.0.87.1.gltfloader.min.js.gz"></script>
+    <script>
+      const createNode = (options) => {
+        const node = document.createElement(options.tag);
+        if(options.className) node.setAttribute('class',options.className);
+        if(options.innerHTML) node.innerHTML = options.innerHTML;
+        if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+        if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+        if(options.root) options.root.appendChild(node);
+        return node;
+      }
+      class App {
+        constructor(){
+          document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
+          window.addEventListener('resize',this.handleResize.bind(this));
+          this.resize_timeout = null;
+        }
+        handleResize(event){
+          if(this.resize_timeout) clearTimeout(this.resize_timeout);
+          this.resize_timeout = setTimeout(this.handleReady.bind(this),50);
+        }
+        handleReady(event){
+          if(this.interval) cancelAnimationFrame(this.interval);
+          this.els = {}
+          this.els.root = document.getElementById('root');
+          this.els.root.innerHTML = ``;
+          const ratio = window.innerHeight / window.innerWidth;
+          this.width = 320; // the n64 resolution width
+          this.height = Math.floor(this.width * ratio);
+          this.loader = new THREE.GLTFLoader();
+          this.loader.load('n64.gltf', this.handleLoadModel.bind(this));
+        }
+        getCenterPosition(scene){
+          const geometry = new THREE.BoxGeometry(1,1,1);
+          const material = new THREE.MeshBasicMaterial({color: '#f00'});
+          const placeholder = new THREE.Mesh(geometry, material);
+          const box_from_scene = new THREE.Box3().setFromObject(scene);
+          return box_from_scene.getCenter(new THREE.Vector3());
+        }
+        handleLoadModel(object){
+          this.n64 = object.scene;
+          this.center = this.getCenterPosition(this.n64);
+          this.scene = new THREE.Scene();
+          this.clock = new THREE.Clock();
+          this.matrix = new THREE.Matrix4();
+          this.camera = new THREE.PerspectiveCamera( 20, this.width / this.height, 1, 100 );
+          this.camera.position.set(0,3,7);
+          this.renderer = new THREE.WebGLRenderer( { antialias: true, powerPreference: 'high-performance' } );
+          this.renderer.setSize( this.width, this.height );
+          this.renderer.setClearColor( 0x000000 );
+          // this.renderer.toneMapping = THREE.LinearToneMapping;
+          // this.renderer.toneMappingExposure = Math.pow(0.94,5.0);
+          // this.renderer.shadowMap.enabled = true;
+          // this.renderer.shadowMap.type = THREE.PCFShadowMap;
+          const point_light = new THREE.PointLight(0xffffcc,2,10);
+          point_light.position.set(0,1,0);
+          const ambient_light = new THREE.AmbientLight(0x20202A,9,1);
+          ambient_light.position.set(0,0,0);
+          this.scene.add(this.n64);
+          this.scene.add(point_light);
+          this.scene.add(ambient_light);
+          this.els.root.appendChild(this.renderer.domElement);
+          this.interval = window.requestAnimationFrame(this.render.bind(this));
+        }
+        async render(){
+          this.matrix.makeRotationY(this.clock.getDelta() * -2 * Math.PI / 5); // 5 seconds per rotation
+          this.camera.position.applyMatrix4(this.matrix);
+          this.camera.lookAt(this.center);
+          this.renderer.render(this.scene,this.camera)
+          this.interval = window.requestAnimationFrame(this.render.bind(this));
+        }
+      }
+      const app = new App();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

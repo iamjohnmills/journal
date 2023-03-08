@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="preload" href="matrix.ttf" as="font" type="font/ttf">
+    <style>
+      @font-face { font-family: matrix; src: url(matrix.ttf); }
+      * { box-sizing: border-box; }
+      html,body { margin: 0; background: #000; overflow: hidden; height: 100%; }
+      #root { width: 100%; height: 100%; }
+      canvas { width: 100%; height: 100%; object-fit: cover;}
+      .fps { position: absolute; left: 30px; bottom: 30px; font-size: 14px; font-family: monospace; color: #ffffd1; z-index: 2; }
+      </style>
+    <script>
+    const createNode = (options) => {
+      const node = document.createElement(options.tag);
+      if(options.className) node.setAttribute('class',options.className);
+      if(options.innerHTML) node.innerHTML = options.innerHTML;
+      if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+      if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+      if(options.root) options.root.appendChild(node);
+      return node;
+    }
+    class Matrix {
+      constructor(){
+        window.addEventListener('resize',this.init.bind(this));
+        document.addEventListener('DOMContentLoaded',this.init.bind(this));
+        this.glyphs = ['モ','エ','ヤ','キ','オ','カ','7','ケ','サ','ス','z','1','5','2','ヨ','タ','ワ','4','ネ','ヌ','ナ','9','8','ヒ','0','ホ','ア','3','ウ',' ','セ','¦',':','"','꞊','ミ','ラ','リ','╌','ツ','テ','ニ','ハ','ソ','▪','—','<','>','0','|','+','*','コ','シ','マ','ム','メ'];
+        this.message = 'GITHUB.COM/IAMJOHNMILLS';
+        this.glyph_size = 12;
+        this.trail_length = 25;
+        this.alpha_step = (1 / this.trail_length) * 100;
+        this.els = [];
+      }
+      async init(){
+        if(this.interval) cancelAnimationFrame(this.interval);
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.root = document.getElementById('root');
+        this.root.innerHTML = ``;
+        this.max_columns = Math.ceil(this.width / this.glyph_size);
+        this.max_rows = Math.ceil(this.height / this.glyph_size);
+        this.rows_center = Math.floor(this.max_rows / 2);
+        this.columns_center = Math.floor(this.max_columns / 2);
+        this.overflow = this.max_rows + 40;
+        this.els.fps = createNode({ root: this.root, tag: 'div', className: `fps`, style: { display: `none` } });
+        this.els.canvas = createNode({ root: this.root, tag: 'canvas', attributes: { width: this.width, height: this.height } });
+        this.context = this.els.canvas.getContext('2d');
+        this.matrix = this.generate();
+        this.interval = window.requestAnimationFrame(this.render.bind(this));
+      }
+      async render(){
+        this.context.clearRect(0, 0, this.width, this.height);
+        for(let x = 0; x < this.matrix.length; x++){
+          const column = this.matrix[x];
+          let position = column.drop_position + (1 * column.drop_speed);
+          column.drop_position = position > this.overflow ? 0 : position;
+          let position_y = Math.floor(column.drop_position);
+          for(let y = 0; y < column.glyphs.length; y++){
+            const row = column.glyphs[y];
+            let render_x = x * this.glyph_size;
+            let render_y = y * this.glyph_size;
+            if(row.active){
+              row.active = !!row.letter;
+              this.context.font = 'bold 11px sans-serif';
+              this.context.fillStyle = '#ffffd1';
+              const letter_width = this.context.measureText(row.letter.letter).width;
+              render_x = ((this.glyph_size - letter_width) / 2) + render_x;
+              this.context.fillText(row.letter.letter, render_x, render_y);
+            } else if(y < position_y){
+              const position_spread = position_y - y;
+              if(position_spread <= this.trail_length && position_spread > 0){
+                let alpha = (100 - position_spread * this.alpha_step) / 100;
+                this.context.font = '11px matrix';
+                this.context.fillStyle = `rgba(180,255,160,${alpha})`;
+                this.context.fillText(row.glyph, render_x, render_y);
+              }
+            } else if(y === position_y){
+              row.active = !!row.letter;
+              this.context.font = '11px matrix';
+              this.context.fillStyle = '#ffffd1';
+              this.context.fillText(row.glyph, render_x, render_y);
+            }
+            if(x === this.matrix.length - 1 && y === column.glyphs.length - 1) {
+              this.interval = window.requestAnimationFrame(this.render.bind(this));
+            }
+          }
+        }
+      }
+      generate(){
+        const message_parts = this.message.split('');
+        const message_start = this.columns_center - (Math.floor(message_parts.length / 2));
+        const message_letters = message_parts.map( (message_part,i) => ({ position: message_start + i, letter: message_part }))
+        return Array.from(Array(this.max_columns)).map((column,x) => {
+          return {
+            drop_position: Math.floor(Math.random()*this.max_rows),
+            drop_speed: Math.random() * (0.5 - 0.1) + 0.1,
+            glyphs: Array.from(Array(this.max_rows)).map((row,y) => ({
+              active: false,
+              glyph: this.glyphs[Math.floor(Math.random()*this.glyphs.length)],
+              letter: message_letters.find(message_letter => message_letter.position === x && this.rows_center === y),
+            }) )
+          }
+        });
+      }
+    }
+    const matrix = new Matrix();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

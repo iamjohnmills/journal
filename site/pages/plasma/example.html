@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      * { box-sizing: border-box; }
+      html,body { margin: 0; background: #000; overflow: hidden; height: 100%; }
+      #root { width: 100%; height: 100%; }
+      canvas { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+    </style>
+    <script>
+    const createNode = (options) => {
+      const node = document.createElement(options.tag);
+      if(options.className) node.setAttribute('class',options.className);
+      if(options.innerHTML) node.innerHTML = options.innerHTML;
+      if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+      if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+      if(options.root) options.root.appendChild(node);
+      return node;
+    }
+    class Plasma {
+      constructor(){
+        window.addEventListener('resize',this.init.bind(this));
+        document.addEventListener('DOMContentLoaded',this.init.bind(this));
+        this.els = [];
+        this.frame = 0;
+      }
+      async init(){
+        if(this.interval) cancelAnimationFrame(this.interval);
+        this.width = 256;
+        this.height = 256;
+        this.size = this.width * this.height;
+        this.root = document.getElementById('root');
+        this.root.innerHTML = ``;
+        this.els.canvas = createNode({ root: this.root, tag: 'canvas', attributes: { width: this.width, height: this.height } });
+        this.context = this.els.canvas.getContext('2d');
+        this.pixels = new Uint8Array(this.size * 4);
+        this.palette = [];
+        for(let x = 0; x < 256; x++){
+          const rgb = this.hsv2rgb(x/255, 1, 1);
+          this.palette[x] = this.rgb2int(rgb[0],rgb[1],rgb[2]);
+        }
+        this.interval = window.requestAnimationFrame(this.render.bind(this));
+      }
+      hsv2rgb(h, s, v) {
+        var r, g, b;
+        var i = Math.floor(h * 6);
+        var f = h * 6 - i;
+        var p = v * (1 - s);
+        var q = v * (1 - f * s);
+        var t = v * (1 - (1 - f) * s);
+        switch (i % 6) {
+          case 0: r = v, g = t, b = p; break;
+          case 1: r = q, g = v, b = p; break;
+          case 2: r = p, g = v, b = t; break;
+          case 3: r = p, g = q, b = v; break;
+          case 4: r = t, g = p, b = v; break;
+          case 5: r = v, g = p, b = q; break;
+        }
+        return [ r * 255, g * 255, b * 255 ];
+      }
+      rgb2int(r,g,b){
+        return (r << 16) + (g << 8) + (b);
+      }
+      int2rgb(num) {
+        const r = (num & 0xff0000) >> 16;
+        const g = (num & 0x00ff00) >> 8;
+        const b = (num & 0x0000ff);
+        return { r: r, g: g, b: b };
+      }
+      getColor(x,y){
+        const mid_x = this.width / 2;
+        const mid_y = this.height / 2;
+        const color = Math.floor((mid_y + (mid_x * Math.sin(x / 16))
+           + mid_y + (mid_x * Math.sin(y / 8))
+           + mid_y + (mid_x * Math.sin((x + y) / 16))
+           + mid_y + (mid_x * Math.sin(Math.sqrt(parseFloat(x * x + y * y)) / 8))
+         ) / 4);
+         return this.int2rgb(this.palette[(color + this.frame) % this.width]);
+      }
+      async render(){
+        this.frame++;
+        this.context.clearRect(0, 0, this.width, this.height);
+        const new_pixels = new Uint8Array(this.size * 4);
+        for(let x = 0; x < this.width; x++){
+          for(let y = 0; y < this.height; y++){
+            const color = this.getColor(x,y);
+            const index = y * (this.width * 4) + x * 4;
+            new_pixels[index] = color.r;
+            new_pixels[index+1] = color.g;
+            new_pixels[index+2] = color.b;
+            new_pixels[index+3] = 255;
+            if(x === this.width - 1 && y === this.height - 1) this.pixels = new_pixels;
+          }
+        }
+        const pixels_uac = new Uint8ClampedArray(this.pixels,this.width,this.height);
+        const pixel_data = new ImageData(pixels_uac,this.width,this.height)
+        this.context.putImageData(pixel_data,0,0);
+        this.interval = window.requestAnimationFrame(this.render.bind(this));
+      }
+    }
+    const plasma = new Plasma();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

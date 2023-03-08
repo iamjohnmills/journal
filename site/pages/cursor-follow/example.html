@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      * { cursor: none; }
+      html, body { height: 100%; margin: 0;  overflow: hidden; }
+      #root { width: 100%; height: 100%; background: blue; overflow: hidden; position: relative;}
+      .cursor { background-repeat: no-repeat; z-index: 1; transform-origin: 100% 50%; position: absolute; background-size: 100%; color: #fff; margin-left: -100px; margin-top: -25px; width: 100px; height: 50px; }
+    </style>
+    <script>
+      const createNode = (options) => {
+        const node = document.createElement(options.tag);
+        if(options.className) node.setAttribute('class',options.className);
+        if(options.innerHTML) node.innerHTML = options.innerHTML;
+        if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+        if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+        if(options.event_listeners) Object.keys(options.event_listeners).forEach(key => node.addEventListener(key,options.event_listeners[key]) )
+        options.root.appendChild(node);
+        return node;
+      }
+      class App {
+        constructor(){
+          document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
+          window.addEventListener('mousemove',this.handleMouseMove.bind(this));
+          window.addEventListener('touchmove',this.handleMouseMove.bind(this));
+          this.els = {};
+        }
+        handleReady(){
+          this.root = document.getElementById('root');
+          this.root.innerHTML = ``;
+          this.els.cursor = createNode({ root: this.root, tag: 'div', className: `cursor`, style: { left: `${window.innerWidth / 2}px`, top: `${window.innerHeight / 2}px` }, innerHTML: `
+          <svg width="150" height="50" viewBox="0 -32 576 576" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M576 288c0-31.894-114.615-160-256-160-76.301 0-161.099 53.098-208 96-21.333-21.167-68.5-56-80-64-10.513-7.313-32 1.5-32 16 0 11.6 21.333 79.5 32 112C21.333 320.5 0 388.4 0 400c0 14.5 21.487 23.313 32 16 11.5-8 58.667-42.833 80-64 46.901 42.902 131.699 96 208 96 141.385 0 256-128.106 256-160Zm-96-32c0 35.346-28.654 64-64 64-35.346 0-64-28.654-64-64 0-35.346 28.654-64 64-64 35.346 0 64 28.654 64 64Zm-64 32c-17.673 0-32-14.327-32-32 0-17.673 14.327-32 32-32 17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32Z"/>
+          </svg>
+          ` })
+        }
+        handleMouseMove(event){
+          let x = !!event.touches ? event.touches[0].clientX : event.clientX;
+          let y = !!event.touches ? event.touches[0].clientY : event.clientY;
+          const rect = this.els.cursor.getBoundingClientRect();
+          const origin_x = rect.left + (rect.width / 2);
+          const origin_y = rect.top + (rect.height / 2);
+          let angle = Math.atan2(y - origin_y, x - origin_x);
+          angle *= 180 / Math.PI;
+          const scaleX = Math.abs(angle) >= 90 ? -1 : 1;
+          angle = scaleX === 1 ? angle : (angle + 180) % 360;
+          this.els.cursor.style.left = `${x}px`;
+          this.els.cursor.style.top = `${y}px`;
+          this.els.cursor.style.transform = `rotate(${angle}deg) scaleX(${scaleX})`;
+        }
+      }
+      const app = new App();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

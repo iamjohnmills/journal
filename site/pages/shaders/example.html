@@ -1,0 +1,251 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      * { box-sizing: border-box; }
+      html,body { margin: 0; background: #000; overflow: hidden; height: 100%; }
+      #root { width: 100%; height: 100%; }
+      canvas { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+      .toggles { position: absolute; left: 25px; bottom: 30px; }
+      .toggles button { margin: 0 5px; }
+    </style>
+
+    <!-- Default shaders -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      precision highp float;
+      uniform vec2 resolution;
+      uniform sampler2D texture;
+      void main() {
+        vec2 uv = gl_FragCoord.xy / resolution.xy;
+        gl_FragColor = texture2D(texture, uv);
+      }
+    </script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      attribute vec3 position;
+      void main() {
+        gl_Position = vec4(position, 1.0);
+      }
+    </script>
+    <script id="surfaceVertexShader" type="x-shader/x-vertex">
+      attribute vec3 position;
+      attribute vec2 surfacePosAttrib;
+      varying vec2 surfacePosition;
+      void main() {
+        surfacePosition = surfacePosAttrib;
+        gl_Position = vec4(position, 1.0);
+      }
+    </script>
+
+    <script>
+    const createNode = (options) => {
+      const node = document.createElement(options.tag);
+      if(options.className) node.setAttribute('class',options.className);
+      if(options.innerHTML) node.innerHTML = options.innerHTML;
+      if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]));
+      if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+      if(options.event_listeners) Object.keys(options.event_listeners).forEach(key => node.addEventListener(key,options.event_listeners[key]) )
+      if(options.root) options.root.appendChild(node);
+      return node;
+    }
+    class App {
+      constructor(){
+        document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
+        window.addEventListener('resize',this.handleResize.bind(this));
+        this.resize_timeout = null;
+        this.active_shader = 'brains';
+        this.quality = 2
+        this.gl = null;
+        this.buffer = null;
+        this.currentProgram = null;
+        this.screenProgram = null;
+        this.vertexPosition = null;
+        this.screenVertexPosition = null;
+        this.startTime = Date.now();
+        this.time = 0;
+        this.screenWidth = 0;
+        this.screenHeight = 0;
+        this.surface = { centerX: 0, centerY: 0, width: 1, height: 1 },
+        this.frontTarget = null;
+        this.backTarget = null;
+      }
+      setSurfaceSize(){
+        this.els.canvas.width = window.innerWidth / this.quality;
+        this.els.canvas.height = window.innerHeight / this.quality;
+        this.screenWidth = this.els.canvas.width;
+        this.screenHeight = this.els.canvas.height;
+        // Compute Surface Corners
+        this.surface.width = this.surface.height * this.screenWidth / this.screenHeight;
+        const halfWidth = this.surface.width * 0.5;
+        const halfHeight = this.surface.height * 0.5;
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.surface.buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([
+          this.surface.centerX - halfWidth, this.surface.centerY - halfHeight,
+          this.surface.centerX + halfWidth, this.surface.centerY - halfHeight,
+          this.surface.centerX - halfWidth, this.surface.centerY + halfHeight,
+          this.surface.centerX + halfWidth, this.surface.centerY - halfHeight,
+          this.surface.centerX + halfWidth, this.surface.centerY + halfHeight,
+          this.surface.centerX - halfWidth, this.surface.centerY + halfHeight]), this.gl.STATIC_DRAW);
+        this.gl.viewport(0, 0, this.els.canvas.width, this.els.canvas.height);
+        this.frontTarget = this.createTarget(this.screenWidth, this.screenHeight);
+        this.backTarget = this.createTarget(this.screenWidth, this.screenHeight);
+      }
+      createTarget(width,height){
+        var target = {};
+        target.framebuffer = this.gl.createFramebuffer();
+        target.renderbuffer = this.gl.createRenderbuffer();
+        target.texture = this.gl.createTexture();
+        // set up framebuffer
+        this.gl.bindTexture(this.gl.TEXTURE_2D, target.texture);
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, width, height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, null);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, target.framebuffer);
+        this.gl.framebufferTexture2D(this.gl.FRAMEBUFFER, this.gl.COLOR_ATTACHMENT0, this.gl.TEXTURE_2D, target.texture, 0);
+        // set up renderbuffer
+        this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, target.renderbuffer);
+        this.gl.renderbufferStorage(this.gl.RENDERBUFFER, this.gl.DEPTH_COMPONENT16, width, height);
+        this.gl.framebufferRenderbuffer(this.gl.FRAMEBUFFER, this.gl.DEPTH_ATTACHMENT, this.gl.RENDERBUFFER, target.renderbuffer);
+        // clean up
+        this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        return target;
+      }
+      createShader(src,type){
+        const shader = this.gl.createShader(type);
+        this.gl.shaderSource(shader,src);
+        this.gl.compileShader(shader);
+        return shader;
+      }
+      cacheUniformLocation(program, label) {
+        if (program.uniformsCache === undefined) program.uniformsCache = {};
+        program.uniformsCache[label] = this.gl.getUniformLocation(program, label);
+      }
+      async fetchShader(name){
+        const response = await fetch(name);
+        return await response.text();
+      }
+      handleResize(event){
+        if(this.resize_timeout) clearTimeout(this.resize_timeout);
+        this.resize_timeout = setTimeout(() => {
+          this.setSurfaceSize();
+        },50);
+      }
+      async handleReady(){
+        if(this.interval) cancelAnimationFrame(this.interval);
+
+        this.default_shaders = {
+          fragment: document.getElementById('fragmentShader').textContent,
+          vertex: document.getElementById('vertexShader').textContent,
+          surface: document.getElementById('surfaceVertexShader').textContent,
+        }
+        this.custom_shaders = {
+          brains: await this.fetchShader('shader-brains.frag'),
+          clouds: await this.fetchShader('shader-clouds.frag'),
+          waves: await this.fetchShader('shader-waves.frag'),
+          paint: await this.fetchShader('shader-paint.frag'),
+        }
+        this.els = {};
+        this.els.root = document.getElementById('root');
+        this.els.root.innerHTML = ``;
+        this.els.buttons = createNode({ root: this.els.root, tag: `div`, className: `toggles` });
+        for(const key of Object.keys(this.custom_shaders) ){
+          const button = createNode({ root: this.els.buttons, tag: `button`, innerHTML: key, event_listeners: { click: event => {
+            if(this.active_shader !== key){
+              this.active_shader = key;
+              this.handleReady();
+            }
+          } } })
+        }
+        // Initialize webgl
+        this.els.canvas = createNode({ root: this.els.root, tag: `canvas` })
+        this.gl = this.els.canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, premultipliedAlpha: false, preserveDrawingBuffer: true });
+        this.gl.getExtension('OES_standard_derivatives');
+        this.buffer = this.gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([-1.0,-1.0,1.0,-1.0,-1.0,1.0,1.0,-1.0,1.0,1.0,-1.0,1.0]), this.gl.STATIC_DRAW);
+        this.surface.buffer = this.gl.createBuffer();
+        this.setSurfaceSize();
+        // Current Program
+        this.currentProgram = this.gl.createProgram(); // if (this.currentProgram) this.gl.deleteProgram(this.currentProgram);
+        const current_vertex_shader = this.createShader(this.default_shaders.surface, this.gl.VERTEX_SHADER);
+        const current_fragment_shader = this.createShader(this.custom_shaders[this.active_shader], this.gl.FRAGMENT_SHADER);
+        this.gl.attachShader(this.currentProgram, current_vertex_shader);
+        this.gl.attachShader(this.currentProgram, current_fragment_shader);
+        this.gl.deleteShader(current_vertex_shader);
+        this.gl.deleteShader(current_fragment_shader);
+        this.gl.linkProgram(this.currentProgram);
+        this.cacheUniformLocation(this.currentProgram,'time');
+        this.cacheUniformLocation(this.currentProgram,'mouse');
+        this.cacheUniformLocation(this.currentProgram,'resolution');
+        this.cacheUniformLocation(this.currentProgram,'backbuffer');
+        this.cacheUniformLocation(this.currentProgram,'surfaceSize');
+        this.gl.useProgram(this.currentProgram);
+        // initialize and enable the vertex attribute arrays
+        this.surface.positionAttribute = this.gl.getAttribLocation(this.currentProgram, 'surfacePosAttrib');
+        this.gl.enableVertexAttribArray(this.surface.positionAttribute);
+        this.vertexPosition = this.gl.getAttribLocation(this.currentProgram, 'position');
+        this.gl.enableVertexAttribArray(this.vertexPosition);
+        // Screen Program
+        this.screenProgram = this.gl.createProgram();
+        var screen_vertex_shader = this.createShader(this.default_shaders.vertex, this.gl.VERTEX_SHADER);
+        var screen_fragment_shader = this.createShader(this.default_shaders.fragment, this.gl.FRAGMENT_SHADER);
+        this.gl.attachShader(this.screenProgram, screen_vertex_shader);
+        this.gl.attachShader(this.screenProgram, screen_fragment_shader);
+        this.gl.deleteShader(screen_vertex_shader);
+        this.gl.deleteShader(screen_fragment_shader);
+        this.gl.linkProgram(this.screenProgram);
+        this.gl.useProgram(this.screenProgram);
+        this.cacheUniformLocation(this.screenProgram,'resolution');
+        this.cacheUniformLocation(this.screenProgram,'texture');
+        this.screenVertexPosition = this.gl.getAttribLocation(this.screenProgram,'position');
+        this.gl.enableVertexAttribArray(this.screenVertexPosition);
+        this.interval = window.requestAnimationFrame(this.render.bind(this));
+      }
+      async render(){
+        // Set uniforms for custom shader
+        this.time = Date.now() - this.startTime;
+        this.gl.useProgram(this.currentProgram);
+        this.gl.uniform1f(this.currentProgram.uniformsCache['time'], this.time / 1000);
+        this.gl.uniform2f(this.currentProgram.uniformsCache['resolution'], this.screenWidth, this.screenHeight);
+        this.gl.uniform1i(this.currentProgram.uniformsCache['backbuffer'], 0);
+        this.gl.uniform2f(this.currentProgram.uniformsCache['surfaceSize'], this.surface.width, this.surface.height);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.surface.buffer);
+        this.gl.vertexAttribPointer(this.surface.positionAttribute, 2, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+        this.gl.vertexAttribPointer(this.vertexPosition, 2, this.gl.FLOAT, false, 0, 0);
+        this.gl.activeTexture(this.gl.TEXTURE0);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.backTarget.texture);
+        // Render custom shader to front buffer
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frontTarget.framebuffer);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+        // Set uniforms for screen shader
+        this.gl.useProgram(this.screenProgram);
+        this.gl.uniform2f(this.screenProgram.uniformsCache['resolution'], this.screenWidth, this.screenHeight);
+        this.gl.uniform1i(this.screenProgram.uniformsCache['texture'], 1);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
+        this.gl.vertexAttribPointer(this.screenVertexPosition, 2, this.gl.FLOAT, false, 0, 0);
+        this.gl.activeTexture(this.gl.TEXTURE1);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.frontTarget.texture);
+        // Render front buffer to screen
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+        // Swap buffers
+        var tmp = this.frontTarget;
+        this.frontTarget = this.backTarget;
+        this.backTarget = tmp;
+        // rAF
+        this.interval = window.requestAnimationFrame(this.render.bind(this));
+      }
+    }
+    const app = new App();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

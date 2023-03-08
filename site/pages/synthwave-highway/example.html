@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      html,body { margin: 0; overflow: hidden; height: 100%; }
+      #root { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; }
+      canvas { width: 100%; height: 100%; }
+    </style>
+    <script>
+      const createNode = (options) => {
+        const node = document.createElement(options.tag);
+        if(options.className) node.setAttribute('class',options.className);
+        if(options.innerHTML) node.innerHTML = options.innerHTML;
+        if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+        if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+        if(options.event_listeners) Object.keys(options.event_listeners).forEach(key => node.addEventListener(key,options.event_listeners[key]) )
+        options.root.appendChild(node);
+        return node;
+      }
+      class App {
+        constructor(){
+          document.addEventListener('DOMContentLoaded',this.init.bind(this));
+          this.frame = 0;
+          this.grid = 24;
+          this.perspective = 100;
+          this.depth = 3000;
+          this.cameraY = 200;
+          this.governor = 100;
+          this.offset = 0;
+          this.xInterval = this.depth / this.grid;
+          this.zInterval = this.depth / this.grid + this.governor;
+        }
+        init(){
+          if(this.interval) cancelAnimationFrame(this.interval);
+          this.root = document.getElementById('root');
+          this.canvas = createNode({ root: this.root, tag: 'canvas' });
+          this.context = this.canvas.getContext('2d');
+          this.canvas.width = window.innerWidth;
+          this.canvas.height = window.innerHeight;
+          this.interval = window.requestAnimationFrame(this.render.bind(this));
+        }
+        drawLine(x1, y1, x2, y2){
+          this.context.beginPath()
+          this.context.moveTo(x1, y1)
+          this.context.lineTo(x2, y2)
+          this.context.stroke()
+        }
+        render(){
+          this.frame++
+          const gradient_top = this.context.createLinearGradient(0, 0, 0, this.canvas.height / 2);
+          gradient_top.addColorStop(0, "#000D18");
+          gradient_top.addColorStop(1, "#032139");
+          this.context.fillStyle = gradient_top;
+          this.context.fillRect(0, 0, this.canvas.width, this.canvas.height / 2);
+          const gradient_bottom = this.context.createLinearGradient(0, this.canvas.height / 2, 0, this.canvas.height);
+          gradient_bottom.addColorStop(0, "#032139");
+          gradient_bottom.addColorStop(1, "#000D18");
+          this.context.fillStyle = gradient_bottom;
+          this.context.fillRect(0, this.canvas.height / 2, this.canvas.width, this.canvas.height / 2)
+          this.context.save()
+          this.context.translate(this.canvas.width / 2, this.canvas.height / 2)
+          this.context.strokeStyle = "#00ccff"
+          for (let i = 0; i < this.grid * 10; i++) {
+          	let x1 = (-this.grid * 5 + i) * this.xInterval + this.offset;
+            let y1 = this.cameraY;
+            let z1 = 1;
+            let x2 = x1;
+            let y2 = y1;
+            let z2 = this.depth;
+           	let px1 = x1 / z1 * this.perspective;
+            let py1 = y1 / z1 * this.perspective;
+            let px2 = x2 / z2 * this.perspective;
+            let py2 = y2 / z2 * this.perspective;
+            this.drawLine(px1, py1, px2, py2);
+          }
+          for (let i = 0; i <= this.depth / this.zInterval; i++) {
+            let x1 = -this.grid * this.xInterval;
+            let y1 = this.cameraY;
+            let z1 = i * this.zInterval - this.frame * 10 % this.zInterval;
+            let x2 = this.grid * 5 * this.xInterval;
+            let y2 = y1;
+            let z2 = z1;
+           	let px1 = x1 / z1 * this.perspective;
+            let py1 = y1 / z1 * this.perspective;
+            let px2 = x2 / z2 * this.perspective;
+            let py2 = y2 / z2 * this.perspective;
+            if (z1 < 0) continue;
+            this.drawLine(px1, py1, px2, py2);
+          }
+          this.context.restore();
+          this.interval = window.requestAnimationFrame(this.render.bind(this));
+        }
+      }
+      const app = new App();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

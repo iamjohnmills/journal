@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style media="screen">
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; overflow: hidden;  }
+      #root { width: 100%; height: 100%; overflow: hidden; position: relative; }
+      #root { background-color: rgb(67,81,198) }
+      button { position: absolute; left: 30px; bottom: 30px; z-index: 1; }
+      .shape { transform-origin: center; position: absolute; filter: drop-shadow(3px 3px 0px #000); }
+
+    </style>
+    <script type="text/javascript">
+      const createNode = (options) => {
+        const node = document.createElement(options.tag);
+        if(options.className) node.setAttribute('class',options.className);
+        if(options.innerHTML) node.innerHTML = options.innerHTML;
+        if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+        if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+        if(options.event_listeners) Object.keys(options.event_listeners).forEach(key => node.addEventListener(key,options.event_listeners[key]) )
+        options.root.appendChild(node);
+        return node;
+      }
+      class App {
+        constructor(){
+          document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
+        }
+        handleReady(){
+          this.els = {};
+          this.els.root = document.getElementById('root');
+          this.els.root.innerHTML = ``;
+          this.els.redraw = createNode({ root: this.els.root, tag: `button`, innerHTML: `Redraw`, event_listeners: { click: () => {
+            this.handleReady();
+          } } })
+          this.reserved = [];
+          this.width = window.innerWidth;
+          this.height = window.innerHeight;
+          this.els
+          this.shapes = {
+            circle: {
+              svg: `<svg width="16" height="16" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M7.5 0a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15Z" /></svg>`,
+              amount: 3
+            },
+            wavy_line: {
+              svg: `<svg width="16" height="16" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M27 23c-2.589 0-4.005-2.549-5.374-5.014C20.537 16.026 19.411 14 18 14c-1.412 0-2.537 2.026-3.626 3.986C13.004 20.451 11.588 23 9 23c-2.65 0-3.853-2.706-4.914-5.094C3.038 15.546 2.256 14 1 14a1 1 0 0 1 0-2c2.65 0 3.853 2.706 4.914 5.094C6.962 19.453 7.744 21 9 21c1.412 0 2.537-2.026 3.626-3.986C13.996 14.549 15.412 12 18 12c2.589 0 4.005 2.549 5.374 5.014C24.463 18.974 25.589 21 27 21c1.256 0 2.037-1.547 3.086-3.906C31.147 14.706 32.351 12 35 12a1 1 0 1 1 0 2c-1.256 0-2.037 1.546-3.086 3.906C30.853 20.294 29.649 23 27 23z"/></svg>`,
+              amount: 2
+            },
+            triangle: {
+              svg: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 120 120"><path fill="currentColor" d="M.233 106.52 60 3l59.768 103.52z"/></svg>`,
+              amount: 4
+            },
+            macaroni: {
+              svg: `<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M16 4a8 8 0 1 0 0 16v-3a5 5 0 0 1 0-10V4Z" /></svg>`,
+              amount: 2
+            },
+            dots: {
+              svg: `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M3.5 2.25a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm11.5 0a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zm-1.25 7a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm1.25 4.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zM2.25 9.25a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm7-1.25a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zM8 15a1.25 1.25 0 1 0 0-2.5A1.25 1.25 0 0 0 8 15zM9.25 2.25a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0zM2.25 15a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z" /></svg>`,
+              amount: 2
+            },
+          };
+          for(const key of Object.keys(this.shapes)){
+            for(let i=0; i<this.shapes[key].amount; i++){
+              this.createShape(this.shapes[key].svg);
+            }
+          }
+        }
+        createShape(svg){
+          let left = Math.floor(Math.random() * this.width);
+          let top = Math.floor(Math.random() * this.height);
+          let scale = Math.floor(Math.random() * 10);
+          const rotate = Math.floor(Math.random() * 360);
+          const r = Math.floor(Math.random() * 255);
+          const g = Math.floor(Math.random() * 255);
+          const b = Math.floor(Math.random() * 255);
+          const el_shape = createNode({ root: this.els.root, tag: 'div', className: `shape`, style: { left: `${left}px`, top: `${top}px` } });
+          const el_svg = createNode({ root: el_shape, tag: 'div', className: `svg`, innerHTML: svg, style: { color: `rgb(${r},${g},${b})`, transform: `scale(${scale}) rotate(${rotate}deg)` } });
+          this.reserved.push({ left: left, top: top, size: scale * 16 });
+        }
+      }
+      const app = new App();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

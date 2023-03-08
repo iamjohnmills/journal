@@ -1,0 +1,20 @@
+{
+  "name": "My Journal",
+  "version": "1.0.0",
+  "description": "Static site generator I built for my writings.",
+  "scripts": {
+    "dev": "nodemon --delay 2.5 -e mustache,js,css,html,md,gif,jpg,png --watch site --watch app index.js",
+    "build": "node index",
+    "preview": "vite"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "highlight.js": "^11.7.0",
+    "js-beautify": "^1.14.7",
+    "markdown-it": "^13.0.1",
+    "mustache": "^4.2.0",
+    "nodemon": "^2.0.20",
+    "vite": "^4.1.3"
+  }
+}
