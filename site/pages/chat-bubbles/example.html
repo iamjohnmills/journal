@@ -6,27 +6,23 @@
       html,body { margin: 0 }
       html { background: #ccc; }
       body { font-family: system-ui; clip-path: inset(0 0 0 0 round 3px); background: #fff; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px; display: flex; align-items: center; justify-content: center; }
-      .messages { width: 400px; }
+      .messages { width: 300px; padding: 20px; }
       .message :last-child { margin-bottom: 0; }
       .message { display: flex; align-items: flex-end; justify-content: flex-start; margin-bottom: 10px; }
       .message.me { justify-content: flex-end; }
-
       .message.me .profile,
       .message.me .user { display: none; }
       .profile { position: relative; z-index: 2; flex-grow: 0; flex-shrink: 0; border-radius: 50%; width: 35px; height: 35px; color: #fff; background: #ccc; display: flex; align-items: center; justify-content: center; }
-
       .content { padding-left: 10px;  }
       .user { padding: 0 4px 4px 4px; color: #999; font-size: 12px; }
-      .bubble { max-width: 200px; position: relative; border-radius: 10px; background: #f1f1f1; padding: 10px; }
+      .bubble { max-width: 200px; position: relative; border-radius: 10px; background: #f1f1f1; padding: 10px; font-size: 14px; }
       .bubble:before { content: ''; z-index: 1; background: #fff; position: absolute; top: 10px; bottom: 0; left: -14px; width: 14px; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px;}
       .bubble:after { content: ''; background: #f1f1f1; position: absolute; top: 10px; bottom: 0; left: -7px; width: 14px; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px;}
       .message.me .bubble { background: blue; color: #fff; }
       .message.me .bubble:before { left: unset; right: -14px; }
       .message.me .bubble:after { background: blue; left: unset; right: -7px; }
-
       .message.teardown .bubble:before { background-color: red }
       .message.teardown .bubble:after { background-color: purple;}
-
     </style>
     <script>
     </script>

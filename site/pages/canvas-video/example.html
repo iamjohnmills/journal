@@ -25,7 +25,7 @@
         constructor(){
           document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
         }
-        handleReady(){
+        async handleReady(){
           if(this.interval) cancelAnimationFrame(this.interval);
           this.els = {};
           this.video_playing = false;
@@ -33,13 +33,15 @@
           this.effect_on = false;
           this.els.root = document.getElementById('root');
           this.els.root.innerHTML = ``;
-          this.video = createNode({ tag: 'video', attributes: { src: `geisha.webm`, loop: 'true' } })
+          this.video = await createNode({ tag: 'video', attributes: { src: `geisha.webm`, loop: 'true' } })
+          this.els.canvas = await createNode({ root: this.els.root, tag: 'canvas' });
+          this.els.canvas.addEventListener('click',this.handleClickCanvas.bind(this));
+          this.context = this.els.canvas.getContext('2d');
+          this.els.start = await createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
+          this.els.start.addEventListener('click',this.handleClickStart.bind(this));
           this.video.addEventListener('loadedmetadata', async event => {
-            this.els.canvas = createNode({ root: this.els.root, tag: 'canvas', attributes: { width: this.video.videoWidth, height: this.video.videoHeight } });
-            this.els.canvas.addEventListener('click',this.handleClickCanvas.bind(this));
-            this.context = this.els.canvas.getContext('2d');
-            this.els.start = await createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
-            this.els.start.addEventListener('click',this.handleClickStart.bind(this));
+            this.els.canvas.width = this.video.videoWidth;
+            this.els.canvas.height = this.video.videoHeight;
             this.els.action = await createNode({ root: this.els.root, tag: 'button', className: 'action', innerHTML: 'Toggle effect', style: { display: `none` } })
             this.els.action.addEventListener('click',this.handleClickAction.bind(this));
             this.interval = window.requestAnimationFrame(this.render.bind(this));
