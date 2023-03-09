@@ -29,11 +29,7 @@ Option | Definition
 `style` | An object of key-value pairs for any style attribute and its value
 `event_listeners` | An object of event listeners defined by key as the listener with its callback function.
 
-I think most of these are self-explanatory, but attributes, styles, and event listeners are more interesting to discuss. You can set any attribute and value for the node easily with this one-liner.
-
-```javascript
-if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
-```
+I think most of these are self-explanatory, but attributes, styles, and event listeners are more interesting to discuss. You can set any attribute and value for the node easily.
 
 `Object.keys` pulls out the keys of the object as an array to loop over with `forEach` to be set on the node from the options value. The same logic is used to set styles, attributes, and event listeners
 

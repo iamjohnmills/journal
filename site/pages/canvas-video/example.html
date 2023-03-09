@@ -40,8 +40,9 @@
             else this.video.play();
           });
           this.context = this.els.canvas.getContext('2d');
-          this.els.start = createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
-          this.els.start.addEventListener('click',this.handleClickStart.bind(this));
+          this.els.start = createNode({ root: this.els.root, tag: 'div', className: 'start' })
+          this.els.start_button = createNode({ root: this.els.start, tag: 'button', innerHTML: 'Click to load video' })
+          this.els.start_button.addEventListener('click',this.handleClickStart.bind(this));
           // this.els.start.addEventListener('touchstart',this.handleClickStart.bind(this));
           this.video.addEventListener('loadedmetadata', async event => {
             this.els.canvas.width = this.video.videoWidth;

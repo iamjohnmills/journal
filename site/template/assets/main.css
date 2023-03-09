@@ -16,7 +16,8 @@ iframe { border: unset; }
 iframe.youtube { width: 640px; height: 480px; }
 code { font-family: monospace; font-weight: 500; background: #fafafa; color: #7c4dff; padding: 4px; font-size: 14px;}
 
-nav { position: fixed; background: #fff; transition: left 0.1s ease-in-out; z-index: 1; top: 0; right: 0; bottom: 0; width: 200px; padding: 20px; }
+nav { position: fixed; background: #fff; transition: left 0.1s ease-in-out; z-index: 1; top: 0; right: 0; bottom: 0; overflow: auto; width: 200px; padding: 20px; }
+nav > span { margin-bottom: 20px; }
 nav > * { margin-bottom: 10px; display: block; font-weight: 300; font-size: 14px; border: unset; }
 nav { left: -200px; }
 nav.on { left: 0; }
