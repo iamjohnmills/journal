@@ -4,7 +4,7 @@
   "description": "Static site generator I built for my writings.",
   "scripts": {
     "dev": "nodemon --delay 2.5 -e mustache,js,css,html,md,gif,jpg,png --watch site --watch app index.js",
-    "build": "node index",
+    "build": "node index production",
     "preview": "vite"
   },
   "author": "",

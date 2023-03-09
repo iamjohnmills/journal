@@ -4,7 +4,11 @@ const path = require('path');
 const root = path.resolve(`${__dirname}/..`);
 
 const get_base_url = () => {
-  return `http://localhost:5000/dist`;
+  if(process.argv[2] === 'production'){
+    return `https://iamjohnmills.github.io/journal`;
+  } else {
+    return `http://localhost:5000/dist`;
+  }
 }
 
 const set_page_obj = (folder) => {
