@@ -33,8 +33,8 @@ Sun, Jan 22, 2023<br/>
 Thu, Jan 19, 2023<br/>
 [Follow mouse cursor](https://iamjohnmills.github.io/journal/cursor-follow/)
 
-Tue, Jan 3, 2023<br/>
-[My one-function JS framework](https://iamjohnmills.github.io/journal/create-node/)
+Tue, Jan 10, 2023<br/>
+[Game of life](https://iamjohnmills.github.io/journal/game-of-life/)
 
 Tue, Jan 3, 2023<br/>
-[Game of life](https://iamjohnmills.github.io/journal/game-of-life/)
+[My one-function JS framework](https://iamjohnmills.github.io/journal/create-node/)
