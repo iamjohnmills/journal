@@ -28,8 +28,7 @@ const task_pages = async () => {
       date: () => { return (text, render) => {
         const date = new Date(text);
         const formatted_date = date.toLocaleString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-        const navicon = `<svg width="16" height="16" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M10 12h30v4H10zm0 10h30v4H10zm0 10h30v4H10z"/></svg>`
-        return `<span class="navicon">${navicon}</span> ${formatted_date}`;
+        return formatted_date;
       }},
     });
     const markdown_html = md.render(markdown_mustache);

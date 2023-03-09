@@ -1,6 +1,6 @@
 {{#date}}03-03-2023{{/date}}
 # 90s abstract shapes
-Here I create some inspired aesthetic art by randomly placing shapes to look like something from Saved By The Bell.
+Here I create some generative aesthetic art by randomly placing shapes to look like something from Saved By The Bell.
 
 {{#preview}}example.html{{/preview}}
 

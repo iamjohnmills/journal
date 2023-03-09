@@ -52,7 +52,7 @@
         document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
         window.addEventListener('resize',this.handleResize.bind(this));
         this.resize_timeout = null;
-        this.active_shader = 'brains';
+        this.active_shader = 'noise';
         this.quality = 2
         this.gl = null;
         this.buffer = null;
@@ -142,10 +142,10 @@
           surface: document.getElementById('surfaceVertexShader').textContent,
         }
         this.custom_shaders = {
+          noise: await this.fetchShader('shader-noise.frag'),
           brains: await this.fetchShader('shader-brains.frag'),
           clouds: await this.fetchShader('shader-clouds.frag'),
           waves: await this.fetchShader('shader-waves.frag'),
-          paint: await this.fetchShader('shader-paint.frag'),
         }
         this.els = {};
         this.els.root = document.getElementById('root');

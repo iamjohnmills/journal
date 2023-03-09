@@ -8,14 +8,14 @@ class App {
     window.addEventListener('resize',this.handleWindowResize.bind(this));
     this.els = {};
     this.els.root = document.querySelector('main');
-    this.els.navicon = document.querySelector('.navicon');
-    this.els.navicon.addEventListener('click',this.handleNavClick.bind(this));
+    this.els.profile_image = document.querySelector('header > img');
+    this.els.profile_image.addEventListener('click',this.handleNavClick.bind(this));
     this.els.nav = document.querySelector('nav');
     this.handleCodeOverflow();
     this.handleCodeIframes();
   }
   handleDocumentClick(event){
-    if(!event.target.closest('.navicon') && !event.target.closest('nav') && this.els.nav.classList.contains('on') ){
+    if(!event.target.closest('header > img') && !event.target.closest('nav') && this.els.nav.classList.contains('on') ){
       this.els.nav.classList.remove('on');
     }
   }
