@@ -4,7 +4,7 @@ Here I explore drawing frames of video to canvas, which exposes more possibiliti
 
 {{#preview}}example.html{{/preview}}
 
-To demonstrate, I'll use some raw footage of the geisha from Bladerunner I converted into a .webm file. Click the document to initiate the vide playback. Click the document again to pause/resume. Toggle the effect on/off with the button.
+To demonstrate, I'll use some raw footage of the geisha from Bladerunner I converted into an mp4 file. Click the document to initiate the vide playback. Click the document again to pause/resume. Toggle the effect on/off with the button.
 
 ```javascript
 rgbSplit(imageData, options) {
@@ -21,7 +21,7 @@ rgbSplit(imageData, options) {
 }
 ```
 
-I'm not such a genius developer to come up with some of this stuff myself. In this case, I took some time to find this function which splits the RGB values of image pixel data.
+In this case, I took some time to find this function which splits the RGB values of image pixel data.
 
 ```javascript
 this.context.drawImage(this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
@@ -32,4 +32,4 @@ if(this.effect_on){
 }
 ```
 
-There are a myriad of complex solutions for image manipulation, and I was quite surprised at how easy and fast this solution turned out to be. Using rAF (requestAnimationFrame), I draw each frame of the video, get its pixel data, apply the filter, and redraw to the canvas.
+There are a myriad of complex solutions for image manipulation, and I was quite surprised at how easy and fast this solution turned out to be. Using requestAnimationFrame, I draw each frame of the video, get its pixel data, apply the filter, and redraw to the canvas.

@@ -33,7 +33,7 @@
           this.effect_on = false;
           this.els.root = document.getElementById('root');
           this.els.root.innerHTML = ``;
-          this.video = createNode({ tag: 'video', attributes: { src: `geisha.webm`, loop: 'true' } })
+          this.video = createNode({ tag: 'video', attributes: { src: `geisha.mp4`, loop: 'true' } })
           this.els.canvas = createNode({ root: this.els.root, tag: 'canvas' });
           this.els.canvas.addEventListener('click', event => {
             if(this.video_playing) this.video.pause();
