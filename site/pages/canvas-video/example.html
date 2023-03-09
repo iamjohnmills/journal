@@ -33,7 +33,7 @@
           this.effect_on = false;
           this.els.root = document.getElementById('root');
           this.els.root.innerHTML = ``;
-          this.video = createNode({ tag: 'video', attributes: { src: `geisha.mp4`, loop: 'true' } })
+          this.video = createNode({ tag: 'video', attributes: { src: `geisha.mp4`, loop: 'true', playsinline: 'true' } })
           this.els.canvas = createNode({ root: this.els.root, tag: 'canvas' });
           this.els.canvas.addEventListener('click', event => {
             if(this.video_playing) this.video.pause();
@@ -42,7 +42,7 @@
           this.context = this.els.canvas.getContext('2d');
           this.els.start = createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
           this.els.start.addEventListener('click',this.handleClickStart.bind(this));
-          this.els.start.addEventListener('touchstart',this.handleClickStart.bind(this));
+          // this.els.start.addEventListener('touchstart',this.handleClickStart.bind(this));
           this.video.addEventListener('loadedmetadata', async event => {
             this.els.canvas.width = this.video.videoWidth;
             this.els.canvas.height = this.video.videoHeight;
