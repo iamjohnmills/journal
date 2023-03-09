@@ -25,7 +25,7 @@
         constructor(){
           document.addEventListener('DOMContentLoaded',this.handleReady.bind(this));
         }
-        async handleReady(){
+        handleReady(){
           if(this.interval) cancelAnimationFrame(this.interval);
           this.els = {};
           this.video_playing = false;
@@ -33,35 +33,29 @@
           this.effect_on = false;
           this.els.root = document.getElementById('root');
           this.els.root.innerHTML = ``;
-          this.video = await createNode({ tag: 'video', attributes: { src: `geisha.webm`, loop: 'true' } })
-          this.els.canvas = await createNode({ root: this.els.root, tag: 'canvas' });
-          this.els.canvas.addEventListener('click',this.handleClickCanvas.bind(this));
+          this.video = createNode({ tag: 'video', attributes: { src: `geisha.webm`, loop: 'true' } })
+
+          this.els.canvas = createNode({ root: this.els.root, tag: 'canvas' });
+          this.els.canvas.addEventListener('click', event => {
+            if(this.video_playing) this.video.pause();
+            else this.video.play();
+          });
           this.context = this.els.canvas.getContext('2d');
-          this.els.start = await createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
-          this.els.start.addEventListener('click',this.handleClickStart.bind(this));
+          this.els.start = createNode({ root: this.els.root, tag: 'div', className: 'start', innerHTML: 'Click to load video' })
+          this.els.start.addEventListener('click', async event => {
+            await this.video.play();
+            this.els.start.style.display = `none`;
+            this.els.action.style.display = `block`;
+          });
           this.video.addEventListener('loadedmetadata', async event => {
             this.els.canvas.width = this.video.videoWidth;
             this.els.canvas.height = this.video.videoHeight;
             this.els.action = await createNode({ root: this.els.root, tag: 'button', className: 'action', innerHTML: 'Toggle effect', style: { display: `none` } })
-            this.els.action.addEventListener('click',this.handleClickAction.bind(this));
+            this.els.action.addEventListener('click', event => {
+              this.effect_on = !this.effect_on;
+            });
             this.interval = window.requestAnimationFrame(this.render.bind(this));
-            this.ready = true;
           })
-        }
-        handleClickAction(event){
-          if(!this.ready) return;
-          this.effect_on = !this.effect_on;
-        }
-        handleClickStart(event){
-          if(!this.ready) return;
-          this.els.start.style.display = `none`;
-          this.els.action.style.display = `block`;
-          this.video.play();
-        }
-        handleClickCanvas(event){
-          if(!this.ready) return;
-          if(this.video_playing) this.video.pause();
-          else this.video.play();
         }
         rgbSplit(imageData, options) {
           // https://hangindev.com/blog/rgb-splitting-effect-with-html5-canvas-and-javascript
