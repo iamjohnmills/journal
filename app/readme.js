@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const task_readme = () => {
   const posts = pages.reduce((string,file) => {
-    const date = file.date ? file.date.toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ``;
+    const date = file.date ? file.date.toLocaleString('en-US', { month: 'short', year: 'numeric' }) : ``;
     return `${string}
 * [${file.title}](${base_url}/${file.folder}/) ${date}
 `},``);
