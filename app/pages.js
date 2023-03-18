@@ -27,7 +27,7 @@ const task_pages = async () => {
       }},
       date: () => { return (text, render) => {
         const date = new Date(text);
-        const formatted_date = date.toLocaleString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        const formatted_date = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
         return formatted_date;
       }},
     });

@@ -5,7 +5,7 @@ I thought I'd try to make a quick CSS only equalizer as part of a prototype for 
 
 {{#preview}}example.html{{/preview}}
 
-The svg is a simple set of three rectangles of varying heights. I place them an equal distance apart to start.
+The SVG is a simple set of three rectangles of varying heights. I place them an equal distance apart to start.
 
 Each rectangle is referenced by the nth-child pseudo selector in order to give each a custom animation duration. I can re-use the same animation keyframes by using a css variable to define the max y position of the rectangle.
 

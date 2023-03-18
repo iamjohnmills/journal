@@ -1,5 +1,5 @@
 {{#date}}03-08-2023{{/date}}
-# WebGL Shaders
+# WebGL shaders
 Here I explore integrating WebGL fragment shaders into a no-dependancy project. The variation of these community-made shaders is impressive mathematically and visually.
 
 {{#preview}}example.html{{/preview}}

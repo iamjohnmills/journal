@@ -4,6 +4,6 @@ Here I create some generative aesthetic art by randomly placing shapes to look l
 
 {{#preview}}example.html{{/preview}}
 
-In this example, I found some random SVG paths around the internet for use here. I put mine in a shapes object that keeps track of the svg as a string, as well as how many I want to render it.
+In this example, I found some random SVG paths around the internet for use here. I put mine in a shapes object as a string along with how many I want to render.
 
-I then loop through them and use the random function heavily. Math.random generates a random decimal number between 0 and 1. By multiplying by a max amount we can get a number between 0 and the max. I use two container tags to store the shape and the svg elements in order to apply a drop-shadow that isn't affected by the rotation.
+I then loop through them and use the random function heavily. Math.random generates a random decimal number between 0 and 1. By multiplying by a max amount I can get a number between 0 and the max. I use two container tags to store the shape and the SVG elements in order to apply a drop-shadow that isn't affected by the rotation.

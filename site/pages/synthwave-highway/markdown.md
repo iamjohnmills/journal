@@ -1,5 +1,5 @@
 {{#date}}02-24-2023{{/date}}
-# Synthwave Highway
+# Synthwave highway
 Here I create an infinite scrolling highway using canvas.
 
 {{#preview}}example.html{{/preview}}

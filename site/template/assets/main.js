@@ -8,19 +8,13 @@ class App {
     window.addEventListener('resize',this.handleWindowResize.bind(this));
     this.els = {};
     this.els.root = document.querySelector('main');
-    this.els.profile_image = document.querySelector('header > img');
-    this.els.profile_image.addEventListener('click',this.handleNavClick.bind(this));
     this.els.nav = document.querySelector('nav');
     this.handleCodeOverflow();
     this.handleCodeIframes();
   }
   handleDocumentClick(event){
-    if(!event.target.closest('header > img') && !event.target.closest('nav') && this.els.nav.classList.contains('on') ){
-      this.els.nav.classList.remove('on');
-    }
-  }
-  handleNavClick(event){
-    this.els.nav.classList.toggle('on');
+    const toggle_nav = event.target.closest('[data-toggle-nav]') && !event.target.closest('nav') || (this.els.nav.classList.contains('on') && !event.target.closest('[data-toggle-nav]') && !event.target.closest('nav') );
+    if(toggle_nav) this.els.nav.classList.toggle('on');
   }
   handleWindowResize(event){
     if(this.resize_timeout) clearTimeout(this.resize_timeout);

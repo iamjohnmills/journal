@@ -2,8 +2,15 @@
 html, body { margin: 0; font-family: system-ui; line-height: 1.5; }
 main { width: 100%; max-width: 700px; padding: 0 30px; margin: 0 auto; }
 
-header { padding: 30px 0 0px; font-size: 14px; color: #94a5c3; display: flex; align-items: center; }
-header > img { width: 30px; border-radius: 50%; cursor: pointer; }
+.button { padding: 5px 12px; background: #000; color: #fff; font-weight: 700; font-size: 11px; border-radius: 15px; text-decoration: unset; display: flex; align-items: center; }
+.button svg { margin-right: 5px; }
+.button path { fill: #fff; }
+header { padding: 20px 30px; font-size: 14px; color: #a3a3be; display: flex; align-items: center; justify-content: space-between; }
+header [data-toggle-nav] { cursor: pointer; display: flex; align-items: center; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+header [data-toggle-nav] svg { margin-right: 5px; }
+header [data-toggle-nav] path { fill: #a3a3be }
+
+/* header > img { width: 30px; border-radius: 50%; cursor: pointer; } */
 
 a { color: unset; font-weight: 700;  }
 iframe { border: unset; }
@@ -19,8 +26,8 @@ nav.on { left: 0; }
 section { padding-top: 20px; padding-bottom: 40px; color: #282936;  }
 section > * { margin: 0 0 20px 0; }
 section > :first-child:is(p) { color: #a3a3be; margin-bottom: 10px; }
-section > h1 { position: relative;  font-weight: 400; font-size: 36px; line-height: 1.2; margin-bottom: 12px; }
-section > h1 + p { font-size: 18px; }
+section > h1 { position: relative;  font-weight: 700; font-size: 36px; line-height: 1.2; margin-bottom: 12px; }
+section > h1 + p { font-size: 20px; }
 section table { width: 100%; }
 section tr > * { padding: 8px; vertical-align: top; font-size: 14px; border: 1px solid #e5e5e5; line-height: 1.2; }
 section th { text-transform: uppercase; }
