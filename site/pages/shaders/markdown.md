@@ -9,3 +9,11 @@ I recently became aware of frament shaders exploring the three.js scene, and was
 Disclaimer, almost all of this code is not mine. I first picked a few of my fav shaders and created them as filename.frag files. I then copied public code used for glslsandbox and cleared it out but all the only the essential pieces of code and tidied up the logic into my usual style of coding. Even so, you can see the amount of methods to integrate it is quite a lot.
 
 The above example reads in the frag files as strings and applies them to a webgl canvas. The glslsandbox code includes boilerplate vertex and fragment shaders needed to apply the custom variants. Using this boilerplate code as a foundation, the custom shaders can be easily swapped out.
+
+**Project Assets**
+Asset | File | Description
+:--- | :--- | :---
+`shader-noise.frag` | [Download]({{page_url}}/shader-noise.frag) | Noise fragment shader
+`shader-brains.frag` | [Download]({{page_url}}/shader-brains.frag) | Brains fragment shader
+`shader-clouds.frag` | [Download]({{page_url}}/shader-clouds.frag) | Clouds fragment shader
+`shader-waves.frag` | [Download]({{page_url}}/shader-waves.frag) | Waves fragment shader

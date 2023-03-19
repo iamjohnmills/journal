@@ -9,3 +9,8 @@ To demonstrate, I'll use some raw footage of the geisha from Bladerunner I conve
 In this case, I took some time to find a function which splits the RGB values of image pixel data. There are a myriad of complex solutions for image manipulation, and I was quite surprised at how easy and fast this solution turned out to be.
 
 Using requestAnimationFrame, I draw each frame of the video, get its pixel data, apply the filter, and redraw to the canvas.
+
+**Project Assets**
+Asset | File | Description
+:--- | :--- | :---
+`geisha.mp4` | [Download]({{page_url}}/geisha.mp4) | Video file of the smoking geisha from Bladerunner

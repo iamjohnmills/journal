@@ -20,6 +20,13 @@ const build_page_html = async (page) => {
       const formatted_date = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
       return formatted_date;
     }},
+    page_url: `${base_url}/${page.folder}`
+    // assets: () => {
+    //   const files = fs.readdirSync(page.src_folder);
+    //   return files.filter(file => file !== '.DS_Store' && !file.endsWith('.md') && !file.endsWith('.html') ).reduce((assets,file) => {
+    //     return `${assets}\n\n[${page.out_folder}/${file}](${page.out_folder}/${file})`
+    //   },'**Project Assets**');
+    // },
   });
   const markdown_html = md.render(markdown_mustache);
   const page_mustache = mustache.render(template, {
