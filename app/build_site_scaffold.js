@@ -1,7 +1,7 @@
 const {root,pages} = require('./config');
 const fs = require('fs');
 
-const task_erase = async () => {
+const build_site_scaffold = async () => {
   fs.rmSync(`${root}/dist`, { recursive: true, force: true });
   fs.mkdirSync(`${root}/dist`);
   fs.mkdirSync(`${root}/dist/assets`);
@@ -11,5 +11,5 @@ const task_erase = async () => {
 }
 
 module.exports = {
-  task_erase
+  build_site_scaffold
 }

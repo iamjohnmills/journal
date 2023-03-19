@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {root,assets} = require('./config');
 
-const task_assets = () => {
+const build_site_assets = () => {
   const path_in = `${root}/site/template/assets`;
   const path_out = `${root}/dist/assets`;
   for(const asset of assets){
@@ -21,5 +21,5 @@ const task_assets = () => {
 }
 
 module.exports = {
-  task_assets
+  build_site_assets
 }

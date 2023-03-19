@@ -1,7 +1,7 @@
 const {root,base_url,pages} = require('./config');
 const fs = require('fs');
 
-const task_readme = () => {
+const build_site_readme = () => {
   const posts = pages.reduce((string,file) => {
     const date = file.date ? file.date.toLocaleString('en-US', { month: 'short', year: 'numeric' }) : ``;
     return `${string}
@@ -14,5 +14,5 @@ ${posts}`;
 }
 
 module.exports = {
-  task_readme
+  build_site_readme
 }

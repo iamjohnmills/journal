@@ -3,7 +3,7 @@ const fs = require('fs');
 const mustache = require('mustache');
 const formatHTML = require('js-beautify').html;
 
-const task_rss = () => {
+const build_site_rss = () => {
   const items = pages.reduce((string,file) => {
     const date = file.date ? file.date.toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }) : ``;
     return `${string}
@@ -26,5 +26,5 @@ const task_rss = () => {
 }
 
 module.exports = {
-  task_rss
+  build_site_rss
 }
