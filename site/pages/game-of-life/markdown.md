@@ -1,6 +1,6 @@
 {{#date}}01-10-2023{{/date}}
 # Game of life
-Here I to make a performant game of life clone in Javascript on canvas.
+Here I make a performant game of life clone in Javascript on canvas.
 
 {{#preview}}example.html{{/preview}}
 
