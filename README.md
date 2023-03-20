@@ -1,6 +1,8 @@
 # John Mills
 I mostly post minimal experiments, tips, and tricks. Keep up-to-date with me and subscribe to my [RSS Feed](https://iamjohnmills.github.io/journal/johnmills.rss).
 
+* [GifTV](https://iamjohnmills.github.io/journal/giftv/) Mar 2023
+
 * [WebGL shaders](https://iamjohnmills.github.io/journal/shaders/) Mar 2023
 
 * [Spinning N64 logo](https://iamjohnmills.github.io/journal/n64/) Mar 2023
