@@ -37,7 +37,7 @@
           document.addEventListener('DOMContentLoaded',this.init.bind(this));
           document.addEventListener('click',this.handleDocumentClick.bind(this));
           this.images = [
-            { url: 'terminator.gif', duration: 2000 },
+            { url: 'terminator.gif', duration: 1500 },
             { url: 'bladerunner.gif', duration: 3500 },
             { url: 'fifth-element.gif', duration: 2300 },
             { url: 'abyss.gif', duration: 2400 },
@@ -70,7 +70,7 @@
           image.onload = () => {
             this.timeout_noise = setTimeout(() => {
               this.els.noise.style.opacity = 0;
-              this.timeout_next = setTimeout(() => { this.loadNext() }, this.images[this.current_image].duration);
+              this.timeout_next = setTimeout(() => { this.loadNext() }, this.images[this.current_image].duration - 500);
             }, 500)
             this.els.image_container.innerHTML = ``;
             this.els.image_container.appendChild(image);
