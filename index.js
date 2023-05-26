@@ -30,7 +30,7 @@
   console.log('Building pages...');
   const {pages} = require('./app/config');
   const {build_page_assets} = require('./app/build_page_assets');
-  const {build_page_image} = require('./app/build_page_image');
+  // const {build_page_image} = require('./app/build_page_image');
   const {build_page_html} = require('./app/build_page_html');
   for(const page of pages){
     await build_page_assets(page);
