@@ -15,6 +15,8 @@
 
 // on public branch
 // git merge master
+// npm run build
+// git commit -am 'rebuilt source files'
 // git subtree push --prefix dist origin public
 
 (async () => {
