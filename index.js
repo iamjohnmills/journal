@@ -9,6 +9,7 @@
 
 // on master branch:
 // npm run dev for localhost urls
+// npm run preview to use vite
 // npm run build for github.io urls
 // git commit -am 'changes that were made'
 // git push origin master'
