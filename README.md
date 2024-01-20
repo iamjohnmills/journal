@@ -1,6 +1,8 @@
 # John Mills
 I mostly post minimal experiments, tips, and tricks. Keep up-to-date with me and subscribe to my [RSS Feed](https://iamjohnmills.github.io/journal/johnmills.rss).
 
+* [Animated Nav Menu](https://iamjohnmills.github.io/journal/animated-nav-icon/) Jan 2024
+
 * [Vector Earth 3D](https://iamjohnmills.github.io/journal/vector-earth/) Oct 2023
 
 * [GifTV](https://iamjohnmills.github.io/journal/giftv/) Mar 2023
