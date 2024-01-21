@@ -1,0 +1,117 @@
+<html>
+
+<head>
+ <title>John Mills</title>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width">
+ <link rel="stylesheet" href="https://iamjohnmills.github.io/journal/assets/site.css" />
+ <script src="https://iamjohnmills.github.io/journal/assets/site.js"></script>
+</head>
+
+<body>
+ <header>
+  <div data-toggle-nav="true">
+   <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#33363F" d="m4 10-.707.707L2.586 10l.707-.707L4 10Zm17 8a1 1 0 1 1-2 0h2ZM8.293 15.707l-5-5 1.414-1.414 5 5-1.414 1.414Zm-5-6.414 5-5 1.414 1.414-5 5-1.414-1.414ZM4 9h10v2H4V9Zm17 7v2h-2v-2h2Zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5V9Z" />
+   </svg> More Articles
+  </div>
+  <a class="button" href="https://iamjohnmills.github.io/journal/johnmills.rss">
+   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 100 100" xml:space="preserve">
+    <path d="M26.258 64.949a8.78 8.78 0 0 0-8.78 8.784 8.782 8.782 0 1 0 17.564 0 8.78 8.78 0 0 0-8.784-8.784z" />
+    <path d="M23.536 40.801c-.046 0-.09.006-.135.007v-.007h-3.464v.039a3.437 3.437 0 0 0-3.056 3.344h-.007v6.159h.041a3.43 3.43 0 0 0 3.021 3.002v.039H23.4v-.048c.045.001.09.007.135.007 12.772 0 23.173 10.321 23.311 23.061h-.033v3.464h.039a3.437 3.437 0 0 0 3.344 3.056v.007h6.158v-.041a3.43 3.43 0 0 0 3.002-3.021h.039v-3.464h-.006c-.137-19.657-16.166-35.604-35.853-35.604z" />
+    <path d="M83.119 76.403C82.98 43.664 56.308 17.07 23.536 17.07c-.046 0-.09.006-.135.007v-.007h-3.464v.039a3.437 3.437 0 0 0-3.056 3.344h-.007v6.159h.041a3.429 3.429 0 0 0 3.021 3.002v.039H23.4v-.048c.045.001.09.007.135.007 25.857 0 46.902 20.967 47.041 46.792h-.035v3.464h.039a3.437 3.437 0 0 0 3.344 3.056v.007h6.159v-.041a3.43 3.43 0 0 0 3.002-3.021h.039v-3.464h-.005z" />
+   </svg> RSS </a>
+ </header>
+ <main>
+  <nav>
+   <span>I mostly post minimal experiments, tips, and tricks. Keep up-to-date with me and subscribe to my <a href="https://iamjohnmills.github.io/journal/johnmills.rss" target="_blank">RSS Feed</a></span>
+   <a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;animated-nav-icon&#x2F;">Animated Nav Menu</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;vector-earth&#x2F;">Vector Earth 3D</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;giftv&#x2F;">GifTV</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;shaders&#x2F;">WebGL shaders</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;n64&#x2F;">Spinning N64 logo</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;chat-bubbles&#x2F;">Chat bubbles</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;canvas-video&#x2F;">Video to canvas</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;90s-shapes&#x2F;">90s abstract shapes</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;equalizer&#x2F;">Animated equalizer</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;synthwave-highway&#x2F;">Synthwave highway</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;plasma&#x2F;">Plasma</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;matrix&#x2F;">Matrix</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;cursor-follow&#x2F;">Follow mouse cursor</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;game-of-life&#x2F;">Game of life</a><a href="https:&#x2F;&#x2F;iamjohnmills.github.io&#x2F;journal&#x2F;create-node&#x2F;">My one-function JS framework</a>
+  </nav>
+  <section>
+   <p>Jan 2023</p>
+   <h1>My one-function JS framework</h1>
+   <p>Ok so its not a framework... but it is a really useful function I wrote that easily creates HTML nodes.</p>
+   <p>I use this mostly in small apps and games and maybe some <em>light-weight prototyping</em>. Its great to quickly inject some HTML into a document, and its fun to see how little code is really needed to get something done without relying on an entire framework. <strong>Anyway, let's break it down</strong>.</p>
+   <pre><code class="hljs"><span class="hljs-keyword">const</span> <span class="hljs-title function_">createNode</span> = (<span class="hljs-params">options</span>) =&gt; {
+  <span class="hljs-keyword">const</span> node = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(options.<span class="hljs-property">tag</span>);
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">className</span>) node.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>,options.<span class="hljs-property">className</span>);
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">innerHTML</span>) node.<span class="hljs-property">innerHTML</span> = options.<span class="hljs-property">innerHTML</span>;
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">attributes</span>) <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(options.<span class="hljs-property">attributes</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> node.<span class="hljs-title function_">setAttribute</span>(key,options.<span class="hljs-property">attributes</span>[key]) );
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">style</span>) <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(options.<span class="hljs-property">style</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> node.<span class="hljs-property">style</span>[key] = options.<span class="hljs-property">style</span>[key]);
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">event_listeners</span>) <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(options.<span class="hljs-property">event_listeners</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> node.<span class="hljs-title function_">addEventListener</span>(key,options.<span class="hljs-property">event_listeners</span>[key]) )
+  <span class="hljs-keyword">if</span>(options.<span class="hljs-property">root</span>) options.<span class="hljs-property">root</span>.<span class="hljs-title function_">appendChild</span>(node);
+  <span class="hljs-keyword">return</span> node;
+}
+</code></pre>
+   <p>The options are an object of the following:</p>
+   <table>
+    <thead>
+     <tr>
+      <th style="text-align:left">Option</th>
+      <th style="text-align:left">Definition</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr>
+      <td style="text-align:left"><code>root</code></td>
+      <td style="text-align:left">An HTML node element to append the newly created node into.</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>tag</code></td>
+      <td style="text-align:left">The HTML tag of the node</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>className</code></td>
+      <td style="text-align:left">A class to add to the node. Also can be set in the attributes object.</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>innerHTML</code></td>
+      <td style="text-align:left">Any HTML string to add into the node</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>attributes</code></td>
+      <td style="text-align:left">An object of key-value pairs for any tag attribute and its value</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>style</code></td>
+      <td style="text-align:left">An object of key-value pairs for any style attribute and its value</td>
+     </tr>
+     <tr>
+      <td style="text-align:left"><code>event_listeners</code></td>
+      <td style="text-align:left">An object of event listeners defined by key as the listener with its callback function.</td>
+     </tr>
+    </tbody>
+   </table>
+   <p>I think most of these are self-explanatory, but attributes, styles, and event listeners are more interesting to discuss. You can set any attribute and value for the node easily.</p>
+   <p><code>Object.keys</code> pulls out the keys of the object as an array to loop over with <code>forEach</code> to be set on the node from the options value. The same logic is used to set styles, attributes, and event listeners</p>
+   <pre><code class="hljs"><span class="hljs-comment">// Usage example</span>
+<span class="hljs-keyword">const</span> root = <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>;
+<span class="hljs-keyword">const</span> el_img = <span class="hljs-title function_">createNode</span>({
+  <span class="hljs-attr">root</span>: root,
+  <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;img&#x27;</span>,
+  <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;img&#x27;</span>,
+  <span class="hljs-attr">style</span>: {
+    <span class="hljs-attr">display</span>: <span class="hljs-string">&#x27;none&#x27;</span>
+  },
+  <span class="hljs-attr">attributes</span>: {
+    <span class="hljs-attr">src</span>: <span class="hljs-string">`https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Half-Life_2_Logo.svg/740px-Half-Life_2_Logo.svg.png?20090427193755`</span>
+  },
+  <span class="hljs-attr">event_listeners</span>: {
+    <span class="hljs-attr">load</span>: <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+      event.<span class="hljs-property">target</span>.<span class="hljs-property">style</span>.<span class="hljs-property">display</span> = <span class="hljs-string">&#x27;block&#x27;</span>;
+    }
+  }
+});
+</code></pre>
+   <p>And that's really all there is to it. So the next time you want to manually code up those HTML tags like a chump, try it this way instead. ;)</p>
+   <aside>
+    <figure>
+     <img src="https://iamjohnmills.github.io/journal/assets/jm-photo-2023.jpg" />
+    </figure>
+    <p>I'm John Mills, a professional frontend engineer. Here I share my experiences and journeys with all of you. Check out all my projects on <a href="https://github.com/iamjohnmills" target="_blank">Github</a>. Message or connect with me on <a href="https://www.linkedin.com/in/iamjohnmills" target="_blank">LinkedIn</a>. I'm a proud dad of my two daughters, cook sometimes, and am interested in a ton of weird stuff.</p>
+   </aside>
+  </section>
+ </main>
+</body>
+
+</html>

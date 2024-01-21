@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+ <channel>
+  <title>John Mills</title>
+  <link>https://iamjohnmills.github.io/journal/</link>
+  <item>
+   <title>Animated Nav Menu</title>
+   <link href="https://iamjohnmills.github.io/journal/animated-nav-icon/" />
+   <pubDate>Sat, Jan 20, 2024, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Vector Earth 3D</title>
+   <link href="https://iamjohnmills.github.io/journal/vector-earth/" />
+   <pubDate>Sun, Oct 1, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>GifTV</title>
+   <link href="https://iamjohnmills.github.io/journal/giftv/" />
+   <pubDate>Thu, Mar 23, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>WebGL shaders</title>
+   <link href="https://iamjohnmills.github.io/journal/shaders/" />
+   <pubDate>Wed, Mar 8, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Spinning N64 logo</title>
+   <link href="https://iamjohnmills.github.io/journal/n64/" />
+   <pubDate>Tue, Mar 7, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Chat bubbles</title>
+   <link href="https://iamjohnmills.github.io/journal/chat-bubbles/" />
+   <pubDate>Sun, Mar 5, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Video to canvas</title>
+   <link href="https://iamjohnmills.github.io/journal/canvas-video/" />
+   <pubDate>Sat, Mar 4, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>90s abstract shapes</title>
+   <link href="https://iamjohnmills.github.io/journal/90s-shapes/" />
+   <pubDate>Fri, Mar 3, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Animated equalizer</title>
+   <link href="https://iamjohnmills.github.io/journal/equalizer/" />
+   <pubDate>Sat, Feb 25, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Synthwave highway</title>
+   <link href="https://iamjohnmills.github.io/journal/synthwave-highway/" />
+   <pubDate>Fri, Feb 24, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Plasma</title>
+   <link href="https://iamjohnmills.github.io/journal/plasma/" />
+   <pubDate>Mon, Feb 20, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Matrix</title>
+   <link href="https://iamjohnmills.github.io/journal/matrix/" />
+   <pubDate>Sun, Jan 22, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Follow mouse cursor</title>
+   <link href="https://iamjohnmills.github.io/journal/cursor-follow/" />
+   <pubDate>Thu, Jan 19, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>Game of life</title>
+   <link href="https://iamjohnmills.github.io/journal/game-of-life/" />
+   <pubDate>Tue, Jan 10, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+  <item>
+   <title>My one-function JS framework</title>
+   <link href="https://iamjohnmills.github.io/journal/create-node/" />
+   <pubDate>Tue, Jan 3, 2023, 12:00:00 AM UTC</pubDate>
+  </item>
+ </channel>
+</rss>

@@ -1,0 +1,81 @@
+/* dracula.min.css */
+/* Author: Mike Barkmin (http://github.com/mikebarkmin) based on Dracula Theme (http://github.com/dracula) */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}
+code.hljs{padding:3px 5px}.hljs{color:#e9e9f4;background:#282936}
+.hljs ::selection,.hljs::selection{background-color:#4d4f68;color:#e9e9f4}
+.hljs-comment{color:#626483}
+.hljs-tag{color:#62d6e8}
+.hljs-operator,.hljs-punctuation,.hljs-subst{color:#e9e9f4}
+.hljs-operator{opacity:.7}
+.hljs-bullet,.hljs-deletion,.hljs-name,.hljs-selector-tag,.hljs-template-variable,.hljs-variable{color:#62d6e8}
+.hljs-attr,.hljs-link,.hljs-literal,.hljs-number,.hljs-symbol,.hljs-variable.constant_{color:#b45bcf}
+.hljs-class .hljs-title,.hljs-title,.hljs-title.class_{color:#00f769}
+.hljs-strong{font-weight:700;color:#00f769}
+.hljs-addition,.hljs-code,.hljs-string,.hljs-title.class_.inherited__{color:#ebff87}
+.hljs-built_in,.hljs-doctag,.hljs-keyword.hljs-atrule,.hljs-quote,.hljs-regexp{color:#a1efe4}
+.hljs-attribute,.hljs-function .hljs-title,.hljs-section,.hljs-title.function_,.ruby .hljs-property{color:#62d6e8}
+.diff .hljs-meta,.hljs-keyword,.hljs-template-tag,.hljs-type{color:#b45bcf}
+.hljs-emphasis{color:#b45bcf;font-style:italic}
+.hljs-meta,.hljs-meta .hljs-keyword,.hljs-meta .hljs-string{color:#00f769}
+.hljs-meta .hljs-keyword,.hljs-meta-keyword{font-weight:700}
+
+/* main.css */
+* { box-sizing:border-box; -webkit-font-smoothing: antialiased; font-family: unset; }
+html, body { margin: 0; font-family: system-ui; line-height: 1.5; }
+main { width: 100%; max-width: 700px; padding: 0 30px; margin: 0 auto; }
+
+.button { padding: 5px 12px; background: #000; color: #fff; font-weight: 700; font-size: 11px; border-radius: 15px; text-decoration: unset; display: flex; align-items: center; }
+.button svg { margin-right: 5px; }
+.button path { fill: #fff; }
+header { padding: 20px 30px; font-size: 14px; color: #a3a3be; display: flex; align-items: center; justify-content: space-between; }
+header [data-toggle-nav] { cursor: pointer; display: flex; align-items: center; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+header [data-toggle-nav] svg { margin-right: 5px; }
+header [data-toggle-nav] path { fill: #a3a3be }
+
+/* header > img { width: 30px; border-radius: 50%; cursor: pointer; } */
+
+a { color: unset; font-weight: 700;  }
+iframe { border: unset; }
+iframe.youtube { width: 640px; height: 480px; }
+code { font-family: monospace; font-weight: 500; background: #fafafa; color: #7c4dff; padding: 4px; font-size: 14px;}
+
+nav { position: fixed; background: #fff; transition: left 0.1s ease-in-out; z-index: 1; top: 0; right: 0; bottom: 0; overflow: auto; width: 200px; padding: 20px; }
+nav > span { margin-bottom: 20px; }
+nav > * { margin-bottom: 10px; display: block; font-weight: 300; font-size: 14px; border: unset; }
+nav { left: -200px; }
+nav.on { left: 0; }
+
+section { padding-top: 20px; padding-bottom: 40px; color: #282936;  }
+section > * { margin: 0 0 20px 0; }
+section > :first-child:is(p) { color: #a3a3be; margin-bottom: 10px; }
+section > h1 { position: relative;  font-weight: 700; font-size: 36px; line-height: 1.2; margin-bottom: 12px; }
+section > h1 + p { font-size: 20px; }
+section table { width: 100%; }
+section tr > * { padding: 8px; vertical-align: top; font-size: 14px; border: 1px solid #e5e5e5; line-height: 1.2; }
+section th { text-transform: uppercase; }
+
+pre code.hljs { font-family: monospace; font-weight: initial; padding: 30px; font-size: 14px; clip-path: inset(0 0 0 0 round 4px); }
+pre code.hljs.overflow { padding-bottom: 10px; }
+pre code { font-weight: initial; }
+pre code::-webkit-scrollbar { height: 26px; width: 26px; }
+pre code::-webkit-scrollbar-track { background-color: transparent; }
+pre code::-webkit-scrollbar-thumb { background-color: #4a4b5e; border: 10px solid #282936; border-radius: 13px; }
+
+pre > .tabs { display: flex; margin: 0 -8px 5px -8px; }
+pre > .tabs > .tab { margin: 5px 8px; cursor: pointer; }
+pre > .tabs > .tab.active { font-weight: bold; }
+pre[data-code] > code { display: none; }
+pre.view-source > code { display: block; }
+pre > iframe { width: 100%; min-height: 250px; clip-path: inset(0 0 0 round 4px) }
+pre.view-source > iframe { display: none; }
+
+aside { position: relative; padding: 30px 0; }
+figure img { width: 100%; border-radius: 50%; display: block; }
+figure { width: 160px; margin: 0 auto 20px auto; }
+aside > p { margin: 0; font-size: 16px; color: #a3a3be; text-align: center; }
+@media (min-width: 700px) {
+  aside { display: flex; align-items: center; }
+  figure { margin: unset; width: unset; flex-basis: 130px; flex-shrink: 0;  }
+  aside > p { padding-left: 30px; flex-grow: 1; text-align: left; }
+}
+
