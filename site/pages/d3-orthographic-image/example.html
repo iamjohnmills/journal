@@ -1,0 +1,174 @@
+<html>
+<head>
+  <title>Orthographic Image Projection with D3</title>
+  <script src="d3.v3.min.js" charset="utf-8"></script>
+  <script src="d3-geo.v1.min.js"></script>
+  <script src="versor.js"></script>
+  <script>
+  const createNode = (options) => {
+    const node = document.createElement(options.tag);
+    if(options.className) node.setAttribute('class',options.className);
+    if(options.innerHTML) node.innerHTML = options.innerHTML;
+    if(options.attributes) Object.keys(options.attributes).forEach(key => node.setAttribute(key,options.attributes[key]) );
+    if(options.style) Object.keys(options.style).forEach(key => node.style[key] = options.style[key]);
+    if(options.root) options.root.appendChild(node);
+    return node;
+  }
+  const getImageData = ({ src, size }) => new Promise(resolve => {
+    const shadow_canvas = document.createElement('canvas');
+    const shadow_context = shadow_canvas.getContext('2d');
+    const image = new Image();
+    image.onload = () => {
+      const ratio = Math.min(image.naturalWidth / size, size / image.naturalHeight);
+      let draw_width = Math.ceil(image.naturalWidth * ratio);
+      let draw_height = Math.ceil(image.naturalHeight * ratio);
+      shadow_canvas.setAttribute('width', draw_width);
+      shadow_canvas.setAttribute('height', draw_height);
+      shadow_context.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, draw_width, draw_height);
+      var imageData = shadow_context.getImageData(0, 0, draw_width, draw_height);
+      return resolve({ data: imageData.data, width: draw_width, height: draw_height });
+    }
+    image.src = src; 
+  })
+  class App {
+    constructor(){
+      document.addEventListener('DOMContentLoaded',this.init.bind(this));
+      document.addEventListener('touchmove', this.handleMousemove.bind(this));
+      document.addEventListener('mousemove', this.handleMousemove.bind(this));
+      document.addEventListener('mousedown', this.handleMousedown.bind(this));
+      document.addEventListener('touchstart', this.handleMousedown.bind(this));
+      document.addEventListener('mouseup', this.handleMouseup.bind(this));
+      document.addEventListener('touchend', this.handleMouseup.bind(this));
+      this.globes = [];
+      this.els = [];
+      this.frame = 0;
+      this.globe_size = 360;
+      this.r1 = [0,0,0];
+      this.active = false;
+      this.processing = false;
+      this.grab_to_rotate = false;
+    }
+    async init(){
+      if(this.raf) cancelAnimationFrame(this.raf);
+      this.root = document.getElementById('root');
+      // const load_image = await getImageData({ src: 'earth.png', size: this.globe_size });
+      // this.map_image_data = load_image.data;
+      // this.width = load_image.width;
+      // this.height = load_image.height;
+      await this.setMapProjectionImage('earth.png');
+      this.els.canvas_globe = createNode({ root: this.root, tag: 'canvas', attributes: { width: this.globe_size, height: this.globe_size } });
+      this.els.actions = createNode({ root: this.root, tag: 'div', className: 'actions', innerHTML: `
+        <button data-src="earth.png">Earth</button>
+        <button data-src="moon.jpg">Moon</button>
+        <button data-src="mars.jpeg">Mars</button>
+        <button data-src="spongebob.jpeg">Spongebob</button>
+        <button data-grab_toggle="true">Toggle Grab</button>
+      ` });
+      this.els.actions.addEventListener('click',this.handleChangeMap.bind(this))
+      this.context = this.els.canvas_globe.getContext('2d');
+      this.projection = d3.geo.orthographic().scale( (this.globe_size / 2) + 1.5).translate([this.globe_size / 2, this.globe_size / 2]).rotate([0,-20,-20]).clipAngle(90);
+      this.path = d3.geo.path().projection(this.projection);
+      this.lambda = d3.scale.linear().domain([0, this.width]).range([-180, 180]);
+      this.phi = d3.scale.linear().domain([0, this.height]).range([90, -90]);
+      this.raf = window.requestAnimationFrame(this.render.bind(this));
+    }
+    async setMapProjectionImage(src) {
+      const load_image = await getImageData({ src: src, size: this.globe_size });
+      this.map_image_data = load_image.data;
+      this.width = load_image.width;
+      this.height = load_image.height;
+    }
+    async handleChangeMap(event) {
+      if(event.target.dataset.src){
+        await this.setMapProjectionImage(event.target.dataset.src);
+      } else if(event.target.dataset.grab_toggle) {
+        this.grab_to_rotate = !this.grab_to_rotate;
+      }
+    }
+    handleMousedown(event){
+      this.active = !!event.target.closest('canvas');
+      if(!this.active) return;
+      const clientX = !!event.touches ? event.touches[0].layerX : event.layerX;
+      const clientY = !!event.touches ? event.touches[0].layerY : event.layerY;
+      this.v0 = versor.cartesian(this.projection.invert([clientX, clientY]));
+      this.r0 = this.projection.rotate();
+      this.q0 = versor(this.r0);
+    }
+    handleMousemove(event){
+      if(!this.active) return;
+      const clientX = !!event.touches ? event.touches[0].layerX : event.layerX;
+      const clientY = !!event.touches ? event.touches[0].layerY : event.layerY;      
+      this.v1 = versor.cartesian(this.projection.rotate(this.r0).invert([clientX, clientY]));
+      this.q1 = versor.multiply(this.q0, versor.delta(this.v0, this.v1));
+      this.r1 = versor.rotation(this.q1);
+    }
+    handleMouseup(event){
+      this.active = false;
+    }
+    updateLayerImageData(img_data){
+      if(this.processing) return;
+      this.processing = true;
+      const data = new Uint8ClampedArray(img_data.length);
+      for (let y = 0; y < this.height; ++y) {
+        for (let x = 0; x < this.width; ++x) {
+          const index = (y * this.width + x) * 4;
+          const [lambda,phi] = this.projection.invert([x, y]);
+          let imageX = Math.trunc((lambda + 180) / 360 * this.width); 
+          let imageY = Math.trunc((90 - phi) / 180 * this.height);
+          const imageIndex = (imageY * this.width + imageX) * 4;    
+          data[index] = img_data[imageIndex];
+          data[index + 1] = img_data[imageIndex + 1];
+          data[index + 2] = img_data[imageIndex + 2];
+          data[index + 3] = 255;
+          if(y === this.height -1 && x === this.width -1 ) {
+            this.processing = false;
+            return new ImageData(data, this.width, this.height);
+          }
+        }
+      }
+    }
+    async render(){
+      if(this.grab_to_rotate){
+        this.projection.rotate([this.r1[0], this.r1[1], this.r1[2]]);
+      } else {
+        this.frame += 1;
+        const rotation = this.frame * 0.5;
+        const lambda = this.lambda(rotation);
+        this.projection.rotate([lambda , -20, -20 ]);
+      }
+      const updatedMapImageData = await this.updateLayerImageData(this.map_image_data);
+      this.context.clearRect(0, 0, this.globe_size, this.globe_size);
+      this.context.putImageData(updatedMapImageData, 0, 0);
+      this.raf = window.requestAnimationFrame(this.render.bind(this));
+    }
+  }
+  const app = new App(); 
+  </script>
+  <style>
+    body { background: #000 }
+    #root { width: 100%; height: 500px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 2; }
+    #root { 
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+      background-repeat: repeat; background-size: 200px 200px }
+    canvas { display: block; image-rendering: pixelated; border-radius: 50%; cursor: grab; position: relative; }
+    canvas:active { cursor: grabbing;}
+    .actions { padding: 40px 0 0 0; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="space">
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+  </div>
+</body>
+</html>
